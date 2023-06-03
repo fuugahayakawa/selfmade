@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Post;
 
 class PostController extends Controller
 {
@@ -14,6 +16,11 @@ class PostController extends Controller
     public function index()
     {
         //
+        $posting = new Post;
+        $posts = $posting->all()->get();
+        return view('posts.index',[
+            'post'=>$posts,
+        ]);
     }
 
     /**
@@ -35,14 +42,17 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //直接書く
-        // $income=new Income;
-        // $columns=['amount','date','type_id','comment','user_id'];
-        // foreach ($columns as $column) {
-        //     $income->$column=$request->$column;
-        // }
-        // Auth::user()->income()->save($income); 
-        // return redirect('/');
+        
+        $posts= new Post;
+        $user=Auth::id();
+        $posts->user_id=$user;
+        $columns=['content','image'];
+        foreach ($columns as $column) {
+            $posts->$column=$request->$column;
+        }
+        $posts -> save(); 
+        
+        return view('home');
     }
 
     /**

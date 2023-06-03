@@ -4,8 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-
-class CommentController extends Controller
+class MyaccountController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -36,16 +35,6 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         //
-        $posts= new Post;
-        $user=Auth::id();
-        $posts->user_id=$user;
-        $columns=['content','image'];
-        foreach ($columns as $column) {
-            $posts->$column=$request->$column;
-        }
-        $posts -> save(); 
-        
-        return view('home');
     }
 
     /**

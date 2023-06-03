@@ -15,9 +15,11 @@ class CreateHoukokuTable extends Migration
     {
         Schema::create('houkoku', function (Blueprint $table) {
             $table->bigIncrements('id');
+            //報告されたユーザーのID
             $table->integer('user_id');
-            $table->integer('report_id')->nullable();
-            $table->string('houkokunaiyou','500')->nullable();
+            //報告したユーザーのID
+            $table->integer('report_id');
+            $table->string('houkokunaiyou','500');
             $table->timestamps();
         });
     }

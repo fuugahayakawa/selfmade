@@ -13,10 +13,26 @@
                             {{ session('status') }}
                         </div>
                     @endif
-                    <a href="{{}}"></a>
-
-                    You are logged in!
-                    <button>投稿をする</button>
+                    <a href="{{route('post.create')}}">
+                        <button>投稿をする</button>
+                    </a>
+                    <!-- post.index  -->
+                    <a href="{{route('post.index')}}">
+                        <button>投稿を見る</button>
+                    </a><br>
+                    
+                    <a href="#">
+                        <button>検索</button>
+                    </a><br>
+                    <!-- myfavorite.index -->
+                    <a href="#">
+                        <button>お気に入り</button>
+                    </a><br>
+                    <!-- 投稿のうちの自分の物の投稿 -->
+                    <!-- myaccount.index -->
+                    <a href="#">
+                        <button>マイアカウント</button>
+                    </a><br>
                 </div>
             </div>
         </div>
