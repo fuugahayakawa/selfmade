@@ -75,6 +75,7 @@ class PostController extends Controller
     public function edit($id)
     {
         //
+        return view('posts.edit');
     }
 
     /**
@@ -86,7 +87,17 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $posts= new Post;
+        $posts=Type::where($id);
+        $posts->amount=$request->amount;
+        $posts->date=$request->date;
+        $posts->comment=$request->comment;
+        $posts->type_id=$request->type_id;
+        // $columns=['amount','date','comment','type_id'];
+        // foreach($columns as $column){
+        //     $record->$column=$request->$column;
+        // }
+        $posts->save();
     }
 
     /**
