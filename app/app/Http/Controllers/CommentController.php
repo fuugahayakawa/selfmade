@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Comment;
 
 class CommentController extends Controller
 {
@@ -36,16 +36,16 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         //
-        $posts= new Post;
-        $user=Auth::id();
-        $posts->user_id=$user;
-        $columns=['content','image'];
+        $comments= new Comment;
+        $comments->user_id=Auth::id();
+        $comments->post_id=$post->id;
+        $columns=['content'];
         foreach ($columns as $column) {
             $posts->$column=$request->$column;
         }
-        $posts -> save(); 
+        $comments -> save(); 
         
-        return view('home');
+        return view('/');
     }
 
     /**

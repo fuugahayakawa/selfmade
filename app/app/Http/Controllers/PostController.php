@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Post;
+use App\Comment;
 
 class PostController extends Controller
 {
@@ -17,7 +18,7 @@ class PostController extends Controller
     {
         //
         $posting = new Post;
-        $posts = $posting->all()->get();
+        $posts = $posting->get();
         return view('posts.index',[
             'post'=>$posts,
         ]);
@@ -30,7 +31,6 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
         return view('posts.create');
     }
 
@@ -64,6 +64,17 @@ class PostController extends Controller
     public function show($id)
     {
         //
+        $posting = new Post;
+        $posts = $posting->find($id);
+        //コメント一覧取得し、
+        // $comments = new Commetnt;
+        // $comment = $comments->where('post_id',$id)->get();
+        return view('posts.show',[
+            'post'=>$posts,
+            // 'comment'=>$comment
+        ]);
+
+        
     }
 
     /**
@@ -75,7 +86,12 @@ class PostController extends Controller
     public function edit($id)
     {
         //
-        return view('posts.edit');
+        $post = Post::find($id);
+
+        if (auth()->user()->id != $post->user_id){
+            return redirect(route('post.index'))->with('error','許可されていない操作です');
+        }
+        return view('posts.edit')->with('post',$post);
     }
 
     /**
@@ -87,17 +103,15 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $posts= new Post;
-        $posts=Type::where($id);
-        $posts->amount=$request->amount;
-        $posts->date=$request->date;
-        $posts->comment=$request->comment;
-        $posts->type_id=$request->type_id;
-        // $columns=['amount','date','comment','type_id'];
-        // foreach($columns as $column){
-        //     $record->$column=$request->$column;
-        // }
+        $posts=Post::find($id);
+        if(auth()->user()->id != $posts->user_id){
+            return redirect(route('posts.index'))->with('error','許可されていない操作です');
+        }
+        $posts->content=$request->input('content');
+        $posts->image=$request->input('image');
         $posts->save();
+
+        return redirect(route('post.index'));
     }
 
     /**
@@ -109,5 +123,12 @@ class PostController extends Controller
     public function destroy($id)
     {
         //
+        $post=Post::find($id);
+        if(auth()->user()->id != $post->user_id){
+            return redirect(route('posts.index'))->with('error','許可されていない操作です');
+        }
+
+        $post->delete();
+        return redirect(route('post.index'));
     }
 }

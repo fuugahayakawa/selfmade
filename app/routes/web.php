@@ -20,4 +20,4 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('post','PostController');
 // Route::post('post','PostController');
-Route::resource('post','CommentController');
+Route::resource('comment','CommentController');
