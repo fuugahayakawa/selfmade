@@ -3,12 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-use App\Comment;
-use App\User;
+use App\Houkoku;
 use App\Post;
+use Illuminate\Http\Request;
 
-class CommentController extends Controller
+class ReportController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -28,6 +27,9 @@ class CommentController extends Controller
     public function create()
     {
         //
+        return view('posts.create',[
+            'post'=>$posts,
+        ]);
     }
 
     /**
@@ -39,36 +41,38 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         //
-        
-        $post = new Post;
-        $comments= new Comment;
+        $houkokus= new Houkoku;
         $user=Auth::id();
-        $comments->user_id=$user;
-        $comments->post_id=$request->post_id;
-        $comments->comment=$request->content;
-        $comments-> save(); 
-        
-        return redirect(route('post.show',$comments->post_id));
+        $houkokus->post_id=$request->post_id;
+        $houkokus->content=$request->content;
+        $houkokus -> save();
+        return redirect(route('post.index'));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Houkoku  $houkoku
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
         //
+        $post = new Post;
+        $posts = $post->join('users','posts.user_id','users.id')->select('posts.*','users.*','posts.id as postid')->orderBy('posts.created_at','desc')->find($id);
+        
+        return view('reports.show',[
+            'post'=>$posts,
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Houkoku  $houkoku
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Houkoku $houkoku)
     {
         //
     }
@@ -77,10 +81,10 @@ class CommentController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Houkoku  $houkoku
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Houkoku $houkoku)
     {
         //
     }
@@ -88,10 +92,10 @@ class CommentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Houkoku  $houkoku
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Houkoku $houkoku)
     {
         //
     }

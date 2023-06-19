@@ -3,21 +3,30 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-use App\Comment;
-use App\User;
+use App\Like;
 use App\Post;
+use App\User;
+use Illuminate\Http\Request;
 
-class CommentController extends Controller
+class FavoriteController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //
+        // $posts = $posting->get();
+        // $names = $posting->join('users','posts.user_id','users.id')->orderBy('posts.created_at','desc')->get();
+        // $names = Post::with('user')->orderBy('created_at','desc')->get();
+        // dd($names);
+        // dd($names['name']);
+        $likes = Like::select('likes.post_id', 'posts.id', 'posts.user_id', 'posts.content', 'posts.image', 'users.name')->join('posts', 'likes.post_id', '=', 'posts.id')->join('users', 'likes.user_id', '=', 'users.id')->where('likes.user_id', Auth::user()->id)->orderBy('posts.created_at','desc')->get();
+        return view('favorite.index',[
+            'post' => $likes
+        ]);
     }
 
     /**
@@ -39,25 +48,15 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         //
-        
-        $post = new Post;
-        $comments= new Comment;
-        $user=Auth::id();
-        $comments->user_id=$user;
-        $comments->post_id=$request->post_id;
-        $comments->comment=$request->content;
-        $comments-> save(); 
-        
-        return redirect(route('post.show',$comments->post_id));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Like  $like
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Like $like)
     {
         //
     }
@@ -65,10 +64,10 @@ class CommentController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Like  $like
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Like $like)
     {
         //
     }
@@ -77,10 +76,10 @@ class CommentController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Like  $like
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Like $like)
     {
         //
     }
@@ -88,10 +87,10 @@ class CommentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Like  $like
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Like $like)
     {
         //
     }

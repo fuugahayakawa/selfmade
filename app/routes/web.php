@@ -11,13 +11,21 @@ use App\Http\Controllers\PostController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Auth::routes();
-
+Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
+Route::post('password/reset/{token}', 'Auth\ResetPasswordController@reset');
 Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('post','PostController');
 // Route::post('post','PostController');
 Route::resource('comment','CommentController');
+Route::resource('report','ReportController');
+Route::resource('favorite','FavoriteController');
+Route::resource('account','MyaccountController');
+Route::resource('outuser','OutuserController');
+Route::resource('outpost','OutpostController');
+//ログイン中のユーザーのみアクセス可能
+Route::get('/', 'PostController@index')->name('posts.index');
+Route::group(['middleware' => ['auth']], function () {
+    //「ajaxlike.jsファイルのurl:'ルーティング'」に書くものと合わせる。
+    Route::post('ajaxlike', 'PostController@ajaxlike');
+});

@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-use App\Comment;
-use App\User;
+use App\user;
 use App\Post;
+use Illuminate\Http\Request;
 
-class CommentController extends Controller
+class OutuserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,6 +16,15 @@ class CommentController extends Controller
     public function index()
     {
         //
+        $user=User::withCount([
+            'posts as posts_count' => function ($query) { 
+                $query->where('del_flg', 1);
+            },
+        ])->orderBy('posts_count','desc')->take(10)->get();
+        
+        return view('outuser.index',[
+            'users'=>$user,
+        ]);
     }
 
     /**
@@ -39,25 +46,15 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         //
-        
-        $post = new Post;
-        $comments= new Comment;
-        $user=Auth::id();
-        $comments->user_id=$user;
-        $comments->post_id=$request->post_id;
-        $comments->comment=$request->content;
-        $comments-> save(); 
-        
-        return redirect(route('post.show',$comments->post_id));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\user  $user
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(user $user)
     {
         //
     }
@@ -65,10 +62,10 @@ class CommentController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\user  $user
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(user $user)
     {
         //
     }
@@ -77,10 +74,10 @@ class CommentController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\user  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, user $user)
     {
         //
     }
@@ -88,10 +85,10 @@ class CommentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\user  $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(user $user)
     {
         //
     }

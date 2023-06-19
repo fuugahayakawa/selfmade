@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-use App\Comment;
-use App\User;
 use App\Post;
+use App\Like;
+use App\User;
+use App\Comment;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-class CommentController extends Controller
+class OutpostController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,6 +19,10 @@ class CommentController extends Controller
     public function index()
     {
         //
+        $posts=Post::withCount('reports')->orderBy('reports_count','desc')->take(20)->get();
+        return view('outpost.index',[
+            'post'=>$posts,
+        ]);
     }
 
     /**
@@ -39,48 +44,48 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         //
-        
-        $post = new Post;
-        $comments= new Comment;
-        $user=Auth::id();
-        $comments->user_id=$user;
-        $comments->post_id=$request->post_id;
-        $comments->comment=$request->content;
-        $comments-> save(); 
-        
-        return redirect(route('post.show',$comments->post_id));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\post  $post
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
         //
+        $posts=new Post;
+        $post=$posts->find($id);
+        $post->del_flg=1;
+        $post->save();
+        return redirect(route('outpost.index'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\post  $post
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
         //
+        $posts=new Post;
+        $post=$posts->find($id);
+        $post->del_flg=0;
+        $post->save();
+        return redirect(route('outpost.index'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, post $post)
     {
         //
     }
@@ -88,10 +93,10 @@ class CommentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\post  $post
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(post $post)
     {
         //
     }

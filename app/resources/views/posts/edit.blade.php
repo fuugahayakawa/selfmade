@@ -3,23 +3,23 @@
 <div class="container">
     
     <div class="row">
-        <h1>投稿の編集</h1>
-        <form action="{{route('post.update',$post->id)}}" method="post">
+        <h1>投稿の編集</h1><br>
+        <form action="{{route('post.update',$post['postid'])}}" method="post">
             @csrf
             @method('patch')
-            <div class="row justify-content-center">
+            <div class="row justify-content-center mt-5">
 
                 <div class="col-md-8">
                     <!-- icon投稿したユーザー  -->
 
                 </div>
                 
-                <div class="col-md-8">
+                <div class="col-md-10">
                     <!-- 他ユーザー（投稿したユーザー） -->
                     
-                    <th scope='col'><option value="{{$post['user_id']}}">{{ $post['user_id']}}</option></th>
+                    <h2>{{ $post['name']}}</h2>
                 </div>
-                
+
             </div>
 
             <div class="row">

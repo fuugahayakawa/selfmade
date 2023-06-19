@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Post;
+use App\Like;
+use App\User;
 
 class MyfavoriteController extends Controller
 {
@@ -14,6 +17,7 @@ class MyfavoriteController extends Controller
     public function index()
     {
         //投稿にlike_idの有無で判断し、like_idがあるものを表示
+
     }
 
     /**

@@ -13,26 +13,31 @@
                             {{ session('status') }}
                         </div>
                     @endif
-                    <a href="{{route('post.create')}}">
-                        <button>投稿をする</button>
-                    </a>
-                    <!-- post.index  -->
-                    <a href="{{route('post.index')}}">
-                        <button>投稿を見る</button>
-                    </a><br>
-                    
-                    <a href="#">
-                        <button>検索</button>
-                    </a><br>
-                    <!-- myfavorite.index -->
-                    <a href="#">
-                        <button>お気に入り</button>
-                    </a><br>
+                    @if(Auth::user()->role==0)
+                        <a href="{{route('post.create')}}">
+                            <button type="button" class="btn btn-primary">投稿をする</button>
+                        </a>
+                        <!-- post.index  -->
+                        <a href="{{route('post.index')}}">
+                            <button type="button" class="btn btn-primary">投稿を見る</button>
+                        </a>
+                        <!-- myfavorite.index -->
+
+                        <a href="{{route('account.index')}}">
+                            <button type="button" class="btn btn-primary">マイアカウント</button>
+                        </a>
+                    @else
+                        <a href="{{route('outuser.index')}}">
+                            <button type="button" class="btn btn-primary">違反報告の多いユーザーのリスト</button>
+                        </a>
+                        <!-- myfavorite.index -->
+
+                        <a href="{{route('outpost.index')}}">
+                            <button type="button" class="btn btn-primary">違反報告の多い投稿上位20件</button>
+                        </a>
+                    @endif
                     <!-- 投稿のうちの自分の物の投稿 -->
                     <!-- myaccount.index -->
-                    <a href="#">
-                        <button>マイアカウント</button>
-                    </a><br>
                 </div>
             </div>
         </div>

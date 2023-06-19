@@ -13,13 +13,9 @@ class CreateHoukokuTable extends Migration
      */
     public function up()
     {
-        Schema::create('houkoku', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            //報告されたユーザーのID
-            $table->integer('user_id');
-            //報告したユーザーのID
-            $table->integer('report_id');
-            $table->string('houkokunaiyou','500');
+        Schema::create('houkokus', function (Blueprint $table) {
+            $table->integer('post_id');
+            $table->string('content','500');
             $table->timestamps();
         });
     }
@@ -31,6 +27,6 @@ class CreateHoukokuTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('houkoku');
+        Schema::dropIfExists('houkokus');
     }
 }
