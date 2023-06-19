@@ -34,5 +34,8 @@
     </table>
         </div>
     </div>
+    <a href="{{route('home')}}">
+        <button type="button" class="btn btn-info">ホームへ画面へ戻る</button>
+    </a>
 </div>
 @endsection
