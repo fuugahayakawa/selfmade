@@ -10,23 +10,6 @@
             <button type="button" class="btn btn-outline-primary">投稿一覧へ戻る</button>
             </a>
 
-            <div class="row ml-2">
-                @if(!Auth::guest() && Auth::user()->id == $post->user_id)
-                    <a href="{{route('post.edit',$post->postid)}}">
-                        <button type="button" class="btn btn-outline-success">編集をする</button>
-                    </a>
-                @endif
-            </div>
-
-            <div class="row ml-4">
-                @if(!Auth::guest() && Auth::user()->id == $post->user_id)
-                    <form action="{{route('post.destroy',$post->postid)}}" method="post" class="float-right">
-                        @csrf
-                        @method('delete')
-                        <input type="submit" value="削除" class="btn btn-outline-danger" onclick='return confirm("削除しますか？");'>
-                    </form>
-                @endif
-            </div>
             
             <div class="col ml-2">
                 <a href="{{route('report.show',$post->postid)}}">

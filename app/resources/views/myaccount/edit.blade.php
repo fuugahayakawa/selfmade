@@ -24,6 +24,10 @@
                 <button type='submit' class='btn btn-primary w-25 mt-3'>登録</button>
             </div> 
 
+            <a href="{{route('home')}}">
+                <button type="button" class="btn btn-info">ホームへ画面へ戻る</button>
+            </a>
+            
         </form>
         
     </div>

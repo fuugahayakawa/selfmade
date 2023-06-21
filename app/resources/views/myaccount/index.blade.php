@@ -4,7 +4,7 @@
     <div class="card">
         <div class="card-body">
             <h5 class="card-title"></h5>
-            <p class="card-text"><img src="{{ asset('storage/'.Auth::user()->image) }}" class="card-img-top" alt="..."></p>
+            <p class="card-text" style="width: 18rem;"><img src="{{ asset('storage/'.Auth::user()->image) }}" class="card-img-top" alt="..."></p>
 
             <p class="card-text">{{Auth::user()->name}}</p>
             

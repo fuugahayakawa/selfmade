@@ -9,7 +9,7 @@
                 <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">コメント内容</label>
                     <input type="textarea" name="content" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                    <div id="emailHelp" class="form-text"></div>
                 </div>
 
                 <button type="submit" class="btn btn-primary">投稿</button>

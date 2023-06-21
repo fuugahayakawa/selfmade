@@ -4,7 +4,7 @@
     <div class="card">
         <div class="card-body">
             <h5 class="card-title"></h5>
-            <p class="card-text"><img src="{{ asset('storage/'.Auth::user()->image) }}" class="card-img-top" alt="..."></p>
+            <p class="card-text" style="width: 18rem;"><img src="{{ asset('storage/'.Auth::user()->image) }}" class="card-img-top" alt="..."></p>
             <p class="card-text">{{Auth::user()->name}}</p>
             
             <a href="{{route('account.index')}}">
@@ -27,12 +27,14 @@
         @foreach($post as $posts)
             <div class="card justify-content-center text-center mt-3 ml-3"style="width: 18rem;" >
             
-                <div class="card-body">
+                <div class="card-body justify-content-center text-center mt-3 ml-3"style="width: 15rem;">
                     <h5 class="card-title">{{ $posts['name'] }}</h5>
                     <p class="card-text">{{ $posts['content'] }}</p>
                 </div>
     
-                <img src="{{ asset('storage/'.$posts['image']) }}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <img src="{{ asset('storage/'.$posts['image']) }}" class="card-img-top" alt="...">
+                </div>
     
                 <div class="card-body">
                     <div class="col">

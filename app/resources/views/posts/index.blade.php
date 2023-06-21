@@ -19,50 +19,57 @@
         </a>
 
     </div>
+    <div class="row justify-content-center">
+        @foreach($post as $posts)
+            <div class="card justify-content-center text-center mt-3 ml-3"style="width: 18rem;" >
+            
+                <div class="card-body" style="width:8rem;">
+                    <img src="{{ asset('storage/'.$posts['image']) }}" class="card-img-top" alt="...">
+                </div>
 
-    @foreach($post as $posts)
-        <div class="card justify-content-center mt-3" >
-        
-            <div class="card-body">
-                <h5 class="card-title">{{ $posts['name'] }}</h5>
-                <p class="card-text">{{ $posts['content'] }}</p>
+                <div class="card-body">
+                    <h5 class="card-title">{{ $posts['name'] }}</h5>
+                    <p class="card-text">{{ $posts['content'] }}</p>
+                </div>
+    
+                <p class="card-text ml-4" style="width: 15rem;"><img src="{{ asset('storage/'.$posts['postimage']) }}" class="card-img-top" alt="..."></p>
+    
+                <div class="card-body">
+
+                    <div class="col">
+                        <!-- 吹き出し -->
+                        <a href="{{route('comment.show',$posts['postid'])}}">
+                            <button type="button" class="btn btn-light">💬</button>
+                        </a>
+                        <!-- この投稿に対してついている投稿の数 -->
+                        <span class="likesCount">{{$posts->comments_count}}</span>
+                    </div>
+
+                    
+                    <div class="col">
+                        @if($like_model->like_exist(Auth::user()->id,$posts['postid']))
+                            <p class="favorite-marke">
+                            <a class="js-like-toggle loved" href="" data-postid="{{ $posts['postid'] }}"><button type="button" class="btn btn-light">★</button></a>
+                            <span class="likesCount">{{$posts->likes_count}}</span>
+                            </p>
+                        @else
+                            <p class="favorite-marke">
+                            <a class="js-like-toggle" href="" data-postid="{{ $posts['postid'] }}"><button type="button" class="btn btn-light">★</button></a>
+                            <span class="likesCount">{{$posts->likes_count}}</span>
+                            </p>
+                        @endif
+                    </div>
+
+                    <div class="col">
+                        <a href="{{route('post.show',$posts['postid'])}}">
+                            <button type="button" class="btn btn-outline-info">詳細表示</button>
+                        </a>
+                    </div>
+
+                </div>
             </div>
-
-            <img src="{{ asset('storage/'.$posts['postimage']) }}" class="card-img-top" alt="...">
-
-            <div class="card-body">
-                <div class="col">
-                    <!-- 吹き出し -->
-                    <button type="button" class="btn btn-light">💬</button>
-                    <!-- この投稿に対してついている投稿の数 -->
-
-                </div>
-
-                
-                <div class="col">
-                    @if($like_model->like_exist(Auth::user()->id,$posts['postid']))
-                        <p class="favorite-marke">
-                        <a class="js-like-toggle loved" href="" data-postid="{{ $posts['postid'] }}"><button type="button" class="btn btn-light">★</button></a>
-                        <span class="likesCount">{{$posts->likes_count}}</span>
-                        </p>
-                    @else
-                        <p class="favorite-marke">
-                        <a class="js-like-toggle" href="" data-postid="{{ $posts['postid'] }}"><button type="button" class="btn btn-light">★</button></a>
-                        <span class="likesCount">{{$posts->likes_count}}</span>
-                        </p>
-                    @endif
-                </div>
-
-                <div class="col">
-                    <a href="{{route('post.show',['post'=>$posts['postid']])}}">
-                        <button type="button" class="btn btn-outline-info">詳細表示</button>
-                    </a>
-                </div>
-
-            </div>
-        </div>
-    @endforeach
-
+        @endforeach
+    </div>
 @endsection
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <script>

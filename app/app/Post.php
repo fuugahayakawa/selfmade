@@ -17,4 +17,7 @@ class Post extends Model
     public function reports(){
         return $this->hasMany('App\Houkoku');
     }
+    public function comments(){
+        return $this->hasMany('App\Comment');
+    }
 }

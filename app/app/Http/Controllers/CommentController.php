@@ -60,6 +60,16 @@ class CommentController extends Controller
     public function show($id)
     {
         //
+        $post = new Post;
+        $posts = $post->join('users','posts.user_id','users.id')->select('posts.*','users.*','posts.id as postid','posts.image as postimage')->orderBy('posts.created_at','desc')->find($id);
+        //コメント一覧取得し、
+        $comment = new Comment;
+        $comments = $comment->join('users','comments.user_id','users.id')->select('comments.*','users.*','comments.id as commentid')->orderBy('comments.created_at','desc')->where('post_id',$id)->get();
+        return view('comment.show',[
+            'post'=>$posts,
+            'comment'=>$comments,
+        ]);
+        
     }
 
     /**

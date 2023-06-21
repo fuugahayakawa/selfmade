@@ -18,7 +18,7 @@ class MyaccountController extends Controller
         //
         $post=new Post;
         $user=Auth::id();
-        $posts=$post->where('user_id',$user)->get();
+        $posts=$post->where('user_id',$user)->orderBy('posts.created_at','desc')->get();
         return view('myaccount.index',[
             'post' => $posts,
         ]);

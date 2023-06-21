@@ -20,7 +20,7 @@ class PostController extends Controller
     {
         //                                                            
         $posting = new Post;
-        $names=Post::withCount('likes');
+        $names=Post::query();
         $names->join('users',function ($names)use($request){
             $names->on('posts.user_id','=','users.id');
         })->select('posts.*','users.*','posts.id as postid','posts.image as postimage');
@@ -44,11 +44,14 @@ class PostController extends Controller
             $names=$names->whereBetween('posts.created_at',[$from,$until]);
         }
 
-        $posts=$names->where('posts.del_flg',0)->orderBy('posts.created_at','desc')->get();
+        $posts=$names->withCount('likes','comments')->where('posts.del_flg',0)->orderBy('posts.created_at','desc')->get();
+        
         $like_model = new Like;
+        $comment_model=new Comment;
         return view('posts.index',[
             'post'=>$posts,
             'like_model'=>$like_model,
+            'comment_model'=>$comment_model,
             'keyword'=>$keyword,
         ]);
     }
@@ -95,8 +98,7 @@ class PostController extends Controller
     {
         //
         $post = new Post;
-        $posts = $post->join('users','posts.user_id','users.id')->select('posts.*','users.*','posts.id as postid')->orderBy('posts.created_at','desc')->find($id);
-        
+        $posts = $post->join('users','posts.user_id','users.id')->select('posts.*','users.*','posts.id as postid','posts.image as postimage')->orderBy('posts.created_at','desc')->find($id);
         //コメント一覧取得し、
         $comment = new Comment;
         $comments = $comment->join('users','comments.user_id','users.id')->select('comments.*','users.*','comments.id as commentid')->orderBy('comments.created_at','desc')->where('post_id',$id)->get();
@@ -117,7 +119,7 @@ class PostController extends Controller
     {
         //
         $post = new Post;
-        $posts = $post->join('users','posts.user_id','users.id')->select('posts.*','users.*','posts.id as postid')->orderBy('posts.created_at','desc')->find($id);
+        $posts = $post->join('users','posts.user_id','users.id')->select('posts.*','users.*','posts.id as postid','posts.image as postimage')->orderBy('posts.created_at','desc')->find($id);
         if (auth()->user()->id != $posts->user_id){
             return redirect(route('post.index'))->with('error','許可されていない操作です');
         }
@@ -135,12 +137,17 @@ class PostController extends Controller
     {
         $posts=Post::find($id);
         
+        $file=$posts->image;
+        if(!empty($request->file('image'))){
+            
+            $file = $request->file('image')->getClientOriginalName();
+        }
         if(auth()->user()->id != $posts->user_id){
             return redirect(route('posts.index'))->with('error','許可されていない操作です');
         }
         $posts->content=$request->input('content');
-        $posts->image=$request->input('image');
-        $posts->save();
+        $posts->image=$file;
+        $posts -> save(); 
 
         return redirect(route('post.index'));
     }
@@ -189,6 +196,37 @@ class PostController extends Controller
         //今回ぐらい少ない時は別にまとめなくてもいいけど一応。笑
         $json = [
             'postLikesCount' => $postLikesCount,
+        ];
+        //下記の記述でajaxに引数の値を返す
+        return response()->json($json);
+    }
+
+    public function ajaxcomment(Request $request)
+    {
+        $id = Auth::user()->id;
+        $post_id = $request->posts_id;
+        $comment = new Comment;
+        $post = Post::findOrFail($post_id);
+
+        // 空でない（既にいいねしている）なら
+        if ($comment->comment_exist($id, $post_id)) {
+            //likesテーブルのレコードを削除
+            $comment = Comment::where('post_id', $post_id)->where('user_id', $id)->delete();
+        } else {
+            //空（まだ「いいね」していない）ならlikesテーブルに新しいレコードを作成する
+            $comment = new Like;
+            $comment->post_id = $request->posts_id;
+            $comment->user_id = Auth::user()->id;
+            $comment->save();
+        }
+
+        //loadCountとすればリレーションの数を○○_countという形で取得できる（今回の場合はいいねの総数）
+        $postcommentsCount = $post->loadCount('comments')->comments_count;
+
+        //一つの変数にajaxに渡す値をまとめる
+        //今回ぐらい少ない時は別にまとめなくてもいいけど一応。笑
+        $json = [
+            'postcommentsCount' => $postcommentsCount,
         ];
         //下記の記述でajaxに引数の値を返す
         return response()->json($json);
