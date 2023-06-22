@@ -29,9 +29,11 @@
             </div>
             
             <div class="col ml-2">
-                <a href="{{route('report.show',$post->postid)}}">
-                    <button type="button" class="btn btn-outline-info">この投稿を報告する</button>
-                </a>
+                @if(!Auth::guest() && Auth::user()->id != $post->user_id)
+                    <a href="{{route('report.show',$post->postid)}}">
+                        <button type="button" class="btn btn-outline-info">この投稿を報告する</button>
+                    </a>
+                @endif
             </div>
         @else
         <a href="{{route('home')}}">

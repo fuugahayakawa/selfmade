@@ -59,7 +59,7 @@ class ReportController extends Controller
     {
         //
         $post = new Post;
-        $posts = $post->join('users','posts.user_id','users.id')->select('posts.*','users.*','posts.id as postid')->orderBy('posts.created_at','desc')->find($id);
+        $posts = $post->join('users','posts.user_id','users.id')->select('posts.*','users.*','posts.id as postid','posts.image as postimage')->orderBy('posts.created_at','desc')->find($id);
         
         return view('reports.show',[
             'post'=>$posts,
